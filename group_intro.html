@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Technical Analysis — Group Presentation</title>
+<style>
+  :root {
+    --primary: #1a365d;
+    --primary-light: #2b6cb0;
+    --accent: #e53e3e;
+    --bg: #f7fafc;
+    --card-bg: #ffffff;
+    --text: #2d3748;
+    --text-light: #718096;
+    --border: #e2e8f0;
+    --success: #38a169;
+    --warning: #dd6b20;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .container {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 16px;
+  }
+
+  /* Header */
+  .header {
+    background: linear-gradient(135deg, var(--primary), var(--primary-light));
+    color: white;
+    padding: 32px 20px;
+    text-align: center;
+    border-radius: 12px;
+    margin-bottom: 24px;
+  }
+  .header h1 {
+    font-size: 1.6rem;
+    font-weight: 700;
+    margin-bottom: 8px;
+  }
+  .header .subtitle {
+    font-size: 0.95rem;
+    opacity: 0.85;
+  }
+  .header .course-badge {
+    display: inline-block;
+    background: rgba(255,255,255,0.2);
+    padding: 4px 14px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    margin-top: 12px;
+  }
+
+  /* Section cards */
+  .card {
+    background: var(--card-bg);
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 16px;
+    border: 1px solid var(--border);
+    box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+  }
+  .card h2 {
+    font-size: 1.15rem;
+    color: var(--primary);
+    margin-bottom: 12px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid var(--border);
+  }
+  .card h3 {
+    font-size: 1rem;
+    color: var(--primary-light);
+    margin: 14px 0 6px;
+  }
+  .card p {
+    font-size: 0.92rem;
+    margin-bottom: 10px;
+    color: var(--text);
+  }
+  .card ul {
+    padding-left: 20px;
+    margin-bottom: 10px;
+  }
+  .card li {
+    font-size: 0.9rem;
+    margin-bottom: 6px;
+  }
+
+  /* Pillar cards */
+  .pillars {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 10px;
+    margin-top: 12px;
+  }
+  .pillar {
+    background: #ebf8ff;
+    border-left: 4px solid var(--primary-light);
+    padding: 12px 14px;
+    border-radius: 0 8px 8px 0;
+  }
+  .pillar strong {
+    display: block;
+    font-size: 0.88rem;
+    color: var(--primary);
+    margin-bottom: 2px;
+  }
+  .pillar span {
+    font-size: 0.84rem;
+    color: var(--text-light);
+  }
+
+  /* Comparison table */
+  .comparison {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+    margin-top: 10px;
+    font-size: 0.85rem;
+  }
+  .comparison .col-header {
+    background: var(--primary);
+    color: white;
+    padding: 8px 12px;
+    font-weight: 600;
+    text-align: center;
+  }
+  .comparison .cell {
+    padding: 8px 12px;
+    border-bottom: 1px solid var(--border);
+  }
+  .comparison .cell:nth-child(odd) {
+    border-right: 1px solid var(--border);
+  }
+
+  /* Section list */
+  .section-item {
+    display: flex;
+    gap: 12px;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--border);
+    align-items: flex-start;
+  }
+  .section-item:last-child {
+    border-bottom: none;
+  }
+  .section-num {
+    flex-shrink: 0;
+    width: 32px;
+    height: 32px;
+    background: var(--primary);
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.82rem;
+    font-weight: 700;
+  }
+  .section-content {
+    flex: 1;
+  }
+  .section-content strong {
+    display: block;
+    font-size: 0.92rem;
+    color: var(--primary);
+    margin-bottom: 2px;
+  }
+  .section-content span {
+    font-size: 0.84rem;
+    color: var(--text-light);
+  }
+
+  /* Block cards */
+  .block-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 12px;
+    margin-top: 12px;
+  }
+  .block-card {
+    border: 2px solid var(--border);
+    border-radius: 10px;
+    overflow: hidden;
+  }
+  .block-card.assigned {
+    border-color: var(--success);
+  }
+  .block-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 14px;
+    background: #f1f5f9;
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: var(--primary);
+  }
+  .block-card.assigned .block-header {
+    background: #f0fff4;
+  }
+  .block-badge {
+    font-size: 0.72rem;
+    padding: 2px 10px;
+    border-radius: 12px;
+    font-weight: 600;
+  }
+  .badge-assigned {
+    background: var(--success);
+    color: white;
+  }
+  .badge-tbd {
+    background: var(--warning);
+    color: white;
+  }
+  .block-body {
+    padding: 10px 14px;
+    font-size: 0.85rem;
+  }
+  .block-body .block-sections {
+    color: var(--text-light);
+    font-size: 0.82rem;
+    margin-top: 4px;
+  }
+  .block-assignee {
+    margin-top: 6px;
+    font-weight: 600;
+    font-size: 0.85rem;
+  }
+
+  /* Members */
+  .member-list {
+    list-style: none;
+    padding: 0;
+  }
+  .member-list li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--border);
+    font-size: 0.9rem;
+  }
+  .member-list li:last-child {
+    border-bottom: none;
+  }
+  .member-name {
+    font-weight: 600;
+  }
+  .member-role {
+    font-size: 0.78rem;
+    padding: 2px 10px;
+    border-radius: 12px;
+  }
+  .role-lead {
+    background: #ebf8ff;
+    color: var(--primary-light);
+  }
+  .role-tbd {
+    background: #fefcbf;
+    color: #975a16;
+  }
+
+  /* Footer */
+  .footer {
+    text-align: center;
+    padding: 20px;
+    font-size: 0.8rem;
+    color: var(--text-light);
+  }
+
+  /* Highlight box */
+  .highlight-box {
+    background: #fffbeb;
+    border: 1px solid #fbd38d;
+    border-radius: 8px;
+    padding: 12px 14px;
+    font-size: 0.88rem;
+    margin-top: 12px;
+  }
+
+  @media (min-width: 600px) {
+    .container { padding: 24px; }
+    .header { padding: 40px 28px; }
+    .header h1 { font-size: 1.9rem; }
+    .pillars { grid-template-columns: 1fr 1fr 1fr; }
+    .block-grid { grid-template-columns: 1fr 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+
+  <!-- Header -->
+  <div class="header">
+    <h1>Technical Analysis</h1>
+    <div class="subtitle">Group Presentation Overview</div>
+    <div class="course-badge">Investment Course — EMBA Program</div>
+  </div>
+
+  <!-- What is Technical Analysis -->
+  <div class="card">
+    <h2>What is Technical Analysis?</h2>
+    <p>
+      Technical Analysis (TA) is a method of evaluating and forecasting future price movements
+      of financial securities by analyzing <strong>historical market data</strong> — primarily
+      price and trading volume — rather than examining a company's financial statements.
+    </p>
+    <p>
+      While <strong>Fundamental Analysis</strong> asks "What should this stock be worth?" by
+      studying earnings, assets, and economic factors, <strong>Technical Analysis</strong> asks
+      "Where is the price likely to go next?" by studying charts and patterns.
+    </p>
+
+    <div class="comparison">
+      <div class="col-header">Technical Analysis</div>
+      <div class="col-header">Fundamental Analysis</div>
+      <div class="cell">Studies price & volume data</div>
+      <div class="cell">Studies financial statements</div>
+      <div class="cell">Charts and patterns</div>
+      <div class="cell">Ratios (P/E, ROE, etc.)</div>
+      <div class="cell">Short to medium-term focus</div>
+      <div class="cell">Long-term focus</div>
+      <div class="cell">"When to buy/sell?"</div>
+      <div class="cell">"What to buy?"</div>
+    </div>
+
+    <h3>The 3 Core Principles</h3>
+    <div class="pillars">
+      <div class="pillar">
+        <strong>1. Market Discounts Everything</strong>
+        <span>All known information is already reflected in the current price.</span>
+      </div>
+      <div class="pillar">
+        <strong>2. Prices Move in Trends</strong>
+        <span>Prices tend to continue in a direction until something causes a reversal.</span>
+      </div>
+      <div class="pillar">
+        <strong>3. History Repeats Itself</strong>
+        <span>Patterns recur because human psychology (fear, greed) doesn't change.</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Connection to course -->
+  <div class="card">
+    <h2>How It Connects to Our Course</h2>
+    <p>
+      Our Investment course covers the <strong>Efficient Market Hypothesis (EMH)</strong> in
+      Chapters 9 and 12. EMH argues that if markets are truly efficient, past prices cannot
+      predict future prices — which directly challenges Technical Analysis.
+    </p>
+    <p>
+      Our presentation bridges this gap: we present TA as the <strong>practitioner's counter-argument</strong>
+      to EMH. Real traders use TA daily because markets are <em>not</em> perfectly efficient —
+      behavioral biases, information delays, and herd behavior create exploitable patterns.
+    </p>
+    <div class="highlight-box">
+      This makes our topic a natural extension of the course material — examining what
+      happens when theory meets real-world trading.
+    </div>
+  </div>
+
+  <!-- All 11 Sections -->
+  <div class="card">
+    <h2>Presentation Sections (11 Topics)</h2>
+    <p>Our presentation covers 11 topics, grouped into 6 blocks for delivery:</p>
+
+    <div class="section-item">
+      <div class="section-num">1</div>
+      <div class="section-content">
+        <strong>Introduction — What is Technical Analysis?</strong>
+        <span>Definition, brief history, who uses TA, and why it matters for investors.</span>
+      </div>
+    </div>
+
+    <div class="section-item">
+      <div class="section-num">2</div>
+      <div class="section-content">
+        <strong>TA vs. Fundamental Analysis</strong>
+        <span>Side-by-side comparison of both approaches — data sources, time horizons, and when each is used.</span>
+      </div>
+    </div>
+
+    <div class="section-item">
+      <div class="section-num">3</div>
+      <div class="section-content">
+        <strong>Core Principles (3 Pillars)</strong>
+        <span>The three foundational assumptions that underpin all of Technical Analysis.</span>
+      </div>
+    </div>
+
+    <div class="section-item">
+      <div class="section-num">4</div>
+      <div class="section-content">
+        <strong>Charts & How to Read Them</strong>
+        <span>Line charts, bar charts, and candlestick charts — understanding price visualization and timeframes.</span>
+      </div>
+    </div>
+
+    <div class="section-item">
+      <div class="section-num">5</div>
+      <div class="section-content">
+        <strong>Trends, Support & Resistance</strong>
+        <span>Identifying uptrends, downtrends, and sideways markets. Drawing trendlines, support floors, and resistance ceilings.</span>
+      </div>
+    </div>
+
+    <div class="section-item">
+      <div class="section-num">6</div>
+      <div class="section-content">
+        <strong>Chart Patterns</strong>
+        <span>Head & Shoulders, Double Top/Bottom, Triangles, Flags — reversal vs. continuation patterns with real examples.</span>
+      </div>
+    </div>
+
+    <div class="section-item">
+      <div class="section-num">7</div>
+      <div class="section-content">
+        <strong>Technical Indicators</strong>
+        <span>Moving Averages (SMA/EMA), RSI, MACD, Bollinger Bands — what they measure and how traders use them.</span>
+      </div>
+    </div>
+
+    <div class="section-item">
+      <div class="section-num">8</div>
+      <div class="section-content">
+        <strong>TA vs. Efficient Market Hypothesis</strong>
+        <span>The academic debate: does TA work if markets are efficient? Connecting to our course chapters 9 & 12.</span>
+      </div>
+    </div>
+
+    <div class="section-item">
+      <div class="section-num">9</div>
+      <div class="section-content">
+        <strong>Real-World Case Study</strong>
+        <span>Applying TA tools to a real stock — showing how indicators and patterns guided actual trading decisions.</span>
+      </div>
+    </div>
+
+    <div class="section-item">
+      <div class="section-num">10</div>
+      <div class="section-content">
+        <strong>Advantages & Limitations</strong>
+        <span>What TA does well, where it fails, and common pitfalls. A balanced, honest assessment.</span>
+      </div>
+    </div>
+
+    <div class="section-item">
+      <div class="section-num">11</div>
+      <div class="section-content">
+        <strong>AI, Machine Learning & the Future of TA</strong>
+        <span>How algorithmic trading and ML models are transforming TA. Live demo of our interactive analysis app.</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Block Grouping -->
+  <div class="card">
+    <h2>6 Presentation Blocks</h2>
+    <p>The 11 sections are grouped into 6 blocks — one per presenter (Ahmed Sabri takes Blocks 1 & 6):</p>
+
+    <div class="block-grid">
+
+      <div class="block-card assigned">
+        <div class="block-header">
+          Block 1
+          <span class="block-badge badge-assigned">Assigned</span>
+        </div>
+        <div class="block-body">
+          <strong>Introduction</strong>
+          <div class="block-sections">Section 1: What is Technical Analysis?</div>
+          <div class="block-assignee" style="color: var(--success);">Ahmed Sabri</div>
+        </div>
+      </div>
+
+      <div class="block-card">
+        <div class="block-header">
+          Block 2
+          <span class="block-badge badge-tbd">TBD</span>
+        </div>
+        <div class="block-body">
+          <strong>TA Foundations</strong>
+          <div class="block-sections">Sections 2 + 3: TA vs FA &amp; Core Principles</div>
+          <div class="block-assignee" style="color: var(--warning);">To be assigned</div>
+        </div>
+      </div>
+
+      <div class="block-card">
+        <div class="block-header">
+          Block 3
+          <span class="block-badge badge-tbd">TBD</span>
+        </div>
+        <div class="block-body">
+          <strong>Reading the Market</strong>
+          <div class="block-sections">Sections 4 + 5: Charts &amp; Trends/Support/Resistance</div>
+          <div class="block-assignee" style="color: var(--warning);">To be assigned</div>
+        </div>
+      </div>
+
+      <div class="block-card">
+        <div class="block-header">
+          Block 4
+          <span class="block-badge badge-tbd">TBD</span>
+        </div>
+        <div class="block-body">
+          <strong>Patterns & Indicators</strong>
+          <div class="block-sections">Sections 6 + 7: Chart Patterns &amp; Technical Indicators</div>
+          <div class="block-assignee" style="color: var(--warning);">To be assigned</div>
+        </div>
+      </div>
+
+      <div class="block-card">
+        <div class="block-header">
+          Block 5
+          <span class="block-badge badge-tbd">TBD</span>
+        </div>
+        <div class="block-body">
+          <strong>Debate & Assessment</strong>
+          <div class="block-sections">Sections 8 + 9 + 10: EMH, Case Study &amp; Limitations</div>
+          <div class="block-assignee" style="color: var(--warning);">To be assigned</div>
+        </div>
+      </div>
+
+      <div class="block-card assigned">
+        <div class="block-header">
+          Block 6
+          <span class="block-badge badge-assigned">Assigned</span>
+        </div>
+        <div class="block-body">
+          <strong>AI/ML & Live Demo</strong>
+          <div class="block-sections">Section 11: AI, Machine Learning &amp; App Demo</div>
+          <div class="block-assignee" style="color: var(--success);">Ahmed Sabri</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Group Members -->
+  <div class="card">
+    <h2>Group Members</h2>
+    <ul class="member-list">
+      <li>
+        <span><span class="member-name">Ahmed Sabri</span></span>
+        <span class="member-role role-lead">Lead — Blocks 1 & 6</span>
+      </li>
+      <li>
+        <span><span class="member-name">Tarek</span></span>
+        <span class="member-role role-tbd">Block TBD</span>
+      </li>
+      <li>
+        <span><span class="member-name">Mahmoud</span></span>
+        <span class="member-role role-tbd">Block TBD</span>
+      </li>
+      <li>
+        <span><span class="member-name">Ahmed Saleh</span></span>
+        <span class="member-role role-tbd">Block TBD</span>
+      </li>
+      <li>
+        <span><span class="member-name">Ahmed Awad</span></span>
+        <span class="member-role role-tbd">Block TBD</span>
+      </li>
+    </ul>
+
+    <div class="highlight-box">
+      Blocks 2–5 will be assigned once everyone reviews this document. Each member
+      picks one block to prepare and present.
+    </div>
+  </div>
+
+  <div class="footer">
+    Technical Analysis — EMBA Investment Course, 2026
+  </div>
+
+</div>
+
+</body>
+</html>
